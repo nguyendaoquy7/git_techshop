@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechShop - Cửa hàng công nghệ trực tuyến</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Page Navigation */
+        .page {
+            display: none;
+            min-height: calc(100vh - 200px);
+            padding-top: 120px;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .search-bar {
+            flex: 1;
+            max-width: 500px;
+            margin: 0 2rem;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1rem;
+        }
+
+        .search-btn {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #4CAF50;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 20px;
+            color: white;
+            cursor: pointer;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .cart-btn, .user-btn {
+            background: transparent;
+            border: 2px solid white;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .cart-btn:hover, .user-btn:hover {
+            background: white;
+            color: #667eea;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Navigation */
+        nav {
+            background: white;
+            padding: 1rem 0;
+            position: fixed;
+            top: 80px;
+            width: 100%;
+            z-index: 999;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .nav-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            padding: 10px 15px;
+            border-radius: 20px;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: #667eea;
+            color: white;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1926&q=80');
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, #667eea30, #764ba230);
+            animation: pulse 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 0.3; }
+            100% { opacity: 0.6; }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .cta-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 18px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .cta-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Product Grid */
+        .section-title {
+            text-align: center;
+            margin-bottom: 3rem;
+            font-size: 2.5rem;
+            color: #333;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 250px;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            position: relative;
+            overflow: hidden;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover .product-image img {
+            transform: scale(1.1);
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: linear-gradient(45deg, #ff4757, #ff3742);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            box-shadow: 0 2px 8px rgba(255, 71, 87, 0.3);
+        }
+
+        .product-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            color: #333;
+        }
+
+        .product-price {
+            font-size: 1.8rem;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+        }
+
+        .product-original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1.1rem;
+            margin-left: 10px;
+        }
+
+        .product-discount {
+            color: #ff4757;
+            font-size: 1rem;
+            margin-left: 10px;
+            font-weight: bold;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .stars {
+            color: #ffc107;
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+
+        .rating-text {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .add-to-cart::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .add-to-cart:hover::before {
+            left: 100%;
+        }
+
+        .add-to-cart:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Filters */
+        .filters {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            margin-bottom: 3rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        }
+
+        .filter-row {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: #333;
+            font-size: 0.95rem;
+        }
+
+        .filter-group select, .filter-group input {
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+
+        .filter-group select:focus, .filter-group input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        /* Cart Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(8px);
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal-content {
+            background: white;
+            margin: 3% auto;
+            padding: 35px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 700px;
+            position: relative;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item:last-child {
+            border-bottom: none;
+        }
+
+        .cart-item-info h4 {
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .cart-item-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .quantity-btn {
+            background: #667eea;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+        }
+
+        .quantity-btn:hover {
+            background: #5a67d8;
+            transform: scale(1.1);
+        }
+
+        .quantity-btn.remove {
+            background: #ff4757;
+        }
+
+        .quantity-btn.remove:hover {
+            background: #ff3742;
+        }
+
+        .cart-total {
+            text-align: right;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #4CAF50;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .checkout-btn {
+            width: 100%;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: all 0.3s;
+        }
+
+        .checkout-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        /* Product Detail Page */
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            margin-bottom: 3rem;
+        }
+
+        .product-detail-image {
+            width: 100%;
+            height: 500px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .product-detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .product-detail-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .product-detail-price {
+            font-size: 2.5rem;
+            color: #4CAF50;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        .product-detail-description {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 2rem;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 2rem;
+        }
+
+        .quantity-input {
+            padding: 10px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            width: 80px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        /* About Page */
+        .about-content {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .about-content h2 {
+            color: #667eea;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .about-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #666;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Contact Page */
+        .contact-form {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input, .form-group textarea {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .submit-btn {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            padding: 4rem 0 2rem;
+            margin-top: 5rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            color: #4CAF50;
+            font-size: 1.3rem;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-section a {
+            color: #ecf0f1;
+            text-decoration: none;
+            transition: color 0.3s;
+            cursor: pointer;
+        }
+
+        .footer-section a:hover {
+            color: #4CAF50;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            margin-top: 3rem;
+            padding-top: 2rem;
+            border-top: 1px solid #555;
+            color: #bdc3c7;
+        }
+
+        /* Notification */
+        .notification {
+            position: fixed;
+            top: 120px;
+            right: 20px;
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            color: white;
+            padding: 18px 30px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.4s ease;
+            z-index: 1500;
+            font-weight: 600;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .search-bar {
+                margin: 0;
+                order: 3;
+                max-width: none;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .product-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .product-detail {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+
+            .filter-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .page {
+                padding-top: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="showPage('home')">🛒 TechShop</div>
+                
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." onkeypress="handleSearchEnter(event)">
+                    <button class="search-btn" onclick="searchProducts()">🔍</button>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="user-btn" onclick="toggleLogin()">👤 Đăng nhập</button>
+                    <button class="cart-btn" onclick="openCart()">
+                        🛒 Giỏ hàng
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <ul class="nav-links">
+                <li><a onclick="showPage('home')" id="nav-home" class="active">Trang chủ</a></li>
+                <li><a onclick="showPage('products')" id="nav-products">Sản phẩm</a></li>
+                <li><a onclick="showPage('about')" id="nav-about">Giới thiệu</a></li>
+                <li><a onclick="showPage('contact')" id="nav-contact">Liên hệ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <div class="container">
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h1>Chào mừng đến TechShop</h1>
+                    <p>Khám phá những sản phẩm công nghệ mới nhất với giá tốt nhất</p>
+                    <button class="cta-btn" onclick="showPage('products')">Mua sắm ngay</button>
+                </div>
+            </section>
+
+            <!-- Featured Products -->
+            <section>
+                <h2 class="section-title">Sản phẩm nổi bật</h2>
+                <div class="product-grid" id="featuredProducts">
+                    <!-- Sản phẩm nổi bật sẽ được tạo bởi JavaScript -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Products Page -->
+    <div id="products" class="page">
+        <div class="container">
+            <h1 class="section-title">Tất cả sản phẩm</h1>
+            
+            <!-- Filters -->
+            <section class="filters">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label>Danh mục:</label>
+                        <select id="categoryFilter" onchange="filterProducts()">
+                            <option value="all">Tất cả</option>
+                            <option value="phone">Điện thoại</option>
+                            <option value="laptop">Laptop</option>
+                            <option value="tablet">Tablet</option>
+                            <option value="accessories">Phụ kiện</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Sắp xếp theo:</label>
+                        <select id="sortSelect" onchange="sortProducts()">
+                            <option value="default">Mặc định</option>
+                            <option value="price-low">Giá thấp → cao</option>
+                            <option value="price-high">Giá cao → thấp</option>
+                            <option value="rating">Đánh giá cao nhất</option>
+                            <option value="name">Tên A-Z</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Khoảng giá: <span id="priceDisplay">50,000,000₫</span></label>
+                        <input type="range" id="priceRange" min="0" max="50000000" value="50000000" oninput="filterByPrice()">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Đánh giá tối thiểu:</label>
+                        <select id="ratingFilter" onchange="filterProducts()">
+                            <option value="0">Tất cả</option>
+                            <option value="4">4⭐ trở lên</option>
+                            <option value="3">3⭐ trở lên</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products Grid -->
+            <section>
+                <div class="product-grid" id="productGrid">
+                    <!-- Sản phẩm sẽ được tạo bởi JavaScript -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Product Detail Page -->
+    <div id="productDetail" class="page">
+        <div class="container">
+            <div id="productDetailContent">
+                <!-- Chi tiết sản phẩm sẽ được tạo bởi JavaScript -->
+            </div>
+        </div>
+    </div>
+
+    <!-- About Page -->
+    <div id="about" class="page">
+        <div class="container">
+            <div class="about-content">
+                <h1 class="section-title">Về TechShop</h1>
+                
+                <h2>Câu chuyện của chúng tôi</h2>
+                <p>TechShop được thành lập vào năm 2020 với sứ mệnh mang đến những sản phẩm công nghệ chất lượng cao với giá cả phải chăng cho người tiêu dùng Việt Nam. Chúng tôi hiểu rằng công nghệ không chỉ là những thiết bị, mà còn là cầu nối giúp con người kết nối và phát triển.</p>
+
+                <h2>Tầm nhìn</h2>
+                <p>Trở thành cửa hàng công nghệ trực tuyến hàng đầu tại Việt Nam, nơi khách hàng có thể tìm thấy mọi sản phẩm công nghệ họ cần với chất lượng dịch vụ xuất sắc.</p>
+
+                <h2>Giá trị cốt lõi</h2>
+                <p><strong>Chất lượng:</strong> Chúng tôi chỉ bán những sản phẩm chính hãng, được kiểm tra kỹ lưỡng.</p>
+                <p><strong>Uy tín:</strong> Minh bạch trong giá cả, chính sách bảo hành rõ ràng.</p>
+                <p><strong>Dịch vụ:</strong> Hỗ trợ khách hàng 24/7, giao hàng nhanh chóng.</p>
+                <p><strong>Đổi mới:</strong> Luôn cập nhật những xu hướng công nghệ mới nhất.</p>
+
+                <h2>Đội ngũ</h2>
+                <p>Đội ngũ TechShop gồm những chuyên gia am hiểu sâu sắc về công nghệ, luôn sẵn sàng tư vấn và hỗ trợ khách hàng tìm được sản phẩm phù hợp nhất.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Page -->
+    <div id="contact" class="page">
+        <div class="container">
+            <h1 class="section-title">Liên hệ với chúng tôi</h1>
+            
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 3rem;">
+                <div class="contact-form">
+                    <h2>Gửi tin nhắn</h2>
+                    <form onsubmit="submitContactForm(event)">
+                        <div class="form-group">
+                            <label>Họ và tên *</label>
+                            <input type="text" required placeholder="Nhập họ và tên của bạn">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Email *</label>
+                            <input type="email" required placeholder="Nhập địa chỉ email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Số điện thoại</label>
+                            <input type="tel" placeholder="Nhập số điện thoại">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Chủ đề *</label>
+                            <select required>
+                                <option value="">Chọn chủ đề</option>
+                                <option value="support">Hỗ trợ kỹ thuật</option>
+                                <option value="sales">Tư vấn bán hàng</option>
+                                <option value="warranty">Bảo hành sản phẩm</option>
+                                <option value="complaint">Khiếu nại</option>
+                                <option value="other">Khác</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Nội dung *</label>
+                            <textarea required rows="5" placeholder="Nhập nội dung tin nhắn..."></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Gửi tin nhắn</button>
+                    </form>
+                </div>
+                
+                <div class="about-content">
+                    <h2>Thông tin liên hệ</h2>
+                    <p><strong>📍 Địa chỉ:</strong><br>
+                    123 Đường Nguyễn Văn Linh, Quận 7, TP.HCM<br>
+                    456 Đường Lê Văn Việt, Quận 9, TP.HCM</p>
+                    
+                    <p><strong>📞 Hotline:</strong><br>
+                    1900 1234 (miễn phí)<br>
+                    028.1234.5678</p>
+                    
+                    <p><strong>📧 Email:</strong><br>
+                    support@techshop.vn<br>
+                    sales@techshop.vn</p>
+                    
+                    <p><strong>🕒 Giờ làm việc:</strong><br>
+                    Thứ 2 - Thứ 6: 8:00 - 22:00<br>
+                    Thứ 7 - Chủ nhật: 9:00 - 21:00</p>
+                    
+                    <h2>Mạng xã hội</h2>
+                    <p>Theo dõi chúng tôi để cập nhật những thông tin mới nhất:</p>
+                    <p>🔵 Facebook: TechShop Vietnam<br>
+                    📸 Instagram: @techshop_vn<br>
+                    ▶️ YouTube: TechShop Vietnam<br>
+                    🐦 Twitter: @techshop_vn</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Modal -->
+    <div id="cartModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeCart()">&times;</span>
+            <h2>Giỏ hàng của bạn</h2>
+            <div id="cartItems"></div>
+            <div class="cart-total" id="cartTotal">Tổng: 0₫</div>
+            <button class="checkout-btn" onclick="checkout()">Thanh toán</button>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TechShop</h3>
+                    <p>Cửa hàng công nghệ trực tuyến hàng đầu Việt Nam. Chúng tôi cam kết mang đến những sản phẩm chất lượng cao với dịch vụ tốt nhất.</p>
+                    <p style="margin-top: 15px;">
+                        🏆 Top 1 cửa hàng công nghệ uy tín<br>
+                        ⚡ Giao hàng nhanh toàn quốc<br>
+                        🔒 Thanh toán an toàn 100%
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Sản phẩm</h3>
+                    <ul>
+                        <li><a onclick="showPage('products'); filterByCategory('phone')">Điện thoại</a></li>
+                        <li><a onclick="showPage('products'); filterByCategory('laptop')">Laptop</a></li>
+                        <li><a onclick="showPage('products'); filterByCategory('tablet')">Tablet</a></li>
+                        <li><a onclick="showPage('products'); filterByCategory('accessories')">Phụ kiện</a></li>
+                        <li><a href="#">Sản phẩm mới</a></li>
+                        <li><a href="#">Sản phẩm khuyến mãi</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Hỗ trợ khách hàng</h3>
+                    <ul>
+                        <li><a onclick="showPage('contact')">Liên hệ hỗ trợ</a></li>
+                        <li><a href="#">Hướng dẫn mua hàng</a></li>
+                        <li><a href="#">Chính sách bảo hành</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Phương thức thanh toán</a></li>
+                        <li><a href="#">Chính sách vận chuyển</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Thông tin công ty</h3>
+                    <ul>
+                        <li><a onclick="showPage('about')">Về TechShop</a></li>
+                        <li><a href="#">Tin tức công nghệ</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 TechShop Vietnam. Tất cả quyền được bảo lưu.</p>
+                <p style="margin-top: 5px;">
+                    Giấy phép ĐKKD số: 0123456789 | 
+                    MST: 0987654321 | 
+                    Hotline: 1900 1234
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script>
+        // Dữ liệu sản phẩm với hình ảnh thật
+        let products = [
+            {
+                id: 1,
+                name: "iPhone 15 Pro Max",
+                price: 29990000,
+                originalPrice: 32990000,
+                category: "phone",
+                rating: 4.8,
+                reviews: 150,
+                image: "https://images.unsplash.com/photo-1695048133142-1a20484d2569?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                badge: "Hot",
+                description: "iPhone 15 Pro Max với chip A17 Pro mạnh mẽ, camera 48MP chuyên nghiệp và màn hình Super Retina XDR 6.7 inch. Thiết kế titanium cao cấp, bền bỉ."
+            },
+            {
+                id: 2,
+                name: "MacBook Air M3",
+                price: 28990000,
+                originalPrice: 31990000,
+                category: "laptop",
+                rating: 4.9,
+                reviews: 89,
+                image: "https://images.unsplash.com/photo-1611186871348-b1ce696e52c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                badge: "New",
+                description: "MacBook Air M3 với hiệu năng vượt trội, pin 18 tiếng và màn hình Liquid Retina 13.6 inch. Mỏng nhẹ chỉ 1.24kg, hoàn hảo cho công việc và giải trí."
+            },
+            {
+                id: 3,
+                name: "iPad Pro 12.9",
+                price: 25990000,
+                originalPrice: 27990000,
+                category: "tablet",
+                rating: 4.7,
+                reviews: 76,
+                image: "https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                badge: "Sale",
+                description: "iPad Pro 12.9 inch với chip M2, màn hình Liquid Retina XDR và hỗ trợ Apple Pencil thế hệ 2. Lý tưởng cho sáng tạo và năng suất cao."
+            },
+            {
+                id: 4,
+                name: "Samsung Galaxy S24 Ultra",
+                price: 26990000,
+                originalPrice: 29990000,
+                category: "phone",
+                rating: 4.6,
+                reviews: 123,
+                image: "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                badge: "Hot",
+                description: "Galaxy S24 Ultra với bút S Pen tích hợp, camera 200MP và màn hình Dynamic AMOLED 2X 6.8 inch. AI thông minh, pin 5000mAh."
+            },
+            {
+                id: 5,
+                name: "Dell XPS 13",
+                price: 24990000,
+                originalPrice: 26990000,
+                category: "laptop",
+                rating: 4.5,
+                reviews: 67,
+                image: "https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                badge: "New",
+                description: "Dell XPS 13 với thiết kế InfinityEdge, màn hình 4K và bộ xử lý Intel Core thế hệ 13. Mỏng nhẹ, hiệu năng cao cho doanh nhân."
+            },
+            {
+                id: 6,
+                name: "AirPods Pro 2",
+                price: 6990000,
+                originalPrice: 7990000,
+                category: "accessories",
+                rating: 4.8,
+                reviews: 234,
+                image: "https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                badge: "Best Seller",
+                description: "AirPods Pro 2 với chip H2, chống ồn chủ động thế hệ mới và âm thanh không gian. Pin 6 tiếng, case sạc MagSafe."
+            },
+            {
+                id: 7,
+                name: "Surface Pro 9",
+                price: 22990000,
+                originalPrice: 24990000,
+                category: "tablet",
+                rating: 4.4,
+                reviews: 45,
+                image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                badge: "Sale",
+                description: "Surface Pro 9 với bộ xử lý Intel Core i7, màn hình PixelSense 13 inch và Type Cover tích hợp. Laptop và tablet trong một."
+            },
+            {
+                id: 8,
+                name: "Apple Watch Series 9",
+                price: 9990000,
+                originalPrice: 10990000,
+                category: "accessories",
+                rating: 4.7,
+                reviews: 156,
+                image: "https://images.unsplash.com/photo-1551816230-ef5deaed4a26?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                badge: "New",
+                description: "Apple Watch Series 9 với chip S9, màn hình Always-On Retina và tính năng sức khỏe toàn diện. Theo dõi sức khỏe 24/7."
+            },
+            {
+                id: 9,
+                name: "Sony WH-1000XM5",
+                price: 8990000,
+                originalPrice: 9990000,
+                category: "accessories",
+                rating: 4.9,
+                reviews: 198,
+                image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                badge: "Hot",
+                description: "Sony WH-1000XM5 với công nghệ chống ồn hàng đầu, âm thanh Hi-Res và pin 30 tiếng. Thiết kế thoải mái cho sử dụng lâu dài."
+            },
+            {
+                id: 10,
+                name: "ASUS ROG Strix G15",
+                price: 32990000,
+                originalPrice: 35990000,
+                category: "laptop",
+                rating: 4.6,
+                reviews: 78,
+                image: "https://images.unsplash.com/photo-1603302576837-37561b2e2302?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1000&q=80",
+                badge: "Gaming",
+                description: "ASUS ROG Strix G15 với RTX 4060, AMD Ryzen 7 và màn hình 144Hz. Laptop gaming mạnh mẽ với hệ thống tản nhiệt ROG."
+            }
+        ];
+
+        let cart = [];
+        let filteredProducts = [...products];
+        let currentPage = 'home';
+
+        // Khởi tạo trang
+        function init() {
+            showPage('home');
+            displayFeaturedProducts();
+            displayProducts(products);
+            updateCartCount();
+        }
+
+        // Hiển thị trang
+        function showPage(pageId) {
+            // Ẩn tất cả các trang
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+
+            // Hiển thị trang được chọn
+            document.getElementById(pageId).classList.add('active');
+            currentPage = pageId;
+
+            // Cập nhật navigation
+            const navLinks = document.querySelectorAll('.nav-links a');
+            navLinks.forEach(link => link.classList.remove('active'));
+            document.getElementById(`nav-${pageId}`).classList.add('active');
+
+            // Cuộn lên đầu trang
+            window.scrollTo(0, 0);
+        }
+
+        // Hiển thị sản phẩm nổi bật
+        function displayFeaturedProducts() {
+            const featuredProducts = products.slice(0, 6); // Lấy 6 sản phẩm đầu
+            const container = document.getElementById('featuredProducts');
+            container.innerHTML = '';
+
+            featuredProducts.forEach(product => {
+                const productCard = createProductCard(product);
+                container.innerHTML += productCard;
+            });
+        }
+
+        // Hiển thị sản phẩm
+        function displayProducts(productList) {
+            const productGrid = document.getElementById('productGrid');
+            productGrid.innerHTML = '';
+
+            productList.forEach(product => {
+                const productCard = createProductCard(product);
+                productGrid.innerHTML += productCard;
+            });
+        }
+
+        // Tạo card sản phẩm
+        function createProductCard(product) {
+            const discount = Math.round((1 - product.price / product.originalPrice) * 100);
+            return `
+                <div class="product-card" data-category="${product.category}" onclick="showProductDetail(${product.id})">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        ${product.badge ? `<div class="product-badge">${product.badge}</div>` : ''}
+                    </div>
+                    <h3 class="product-title">${product.name}</h3>
+                    <div class="product-price">
+                        ${formatPrice(product.price)}
+                        ${product.originalPrice !== product.price ? `<span class="product-original-price">${formatPrice(product.originalPrice)}</span>` : ''}
+                        ${discount > 0 ? `<span class="product-discount">-${discount}%</span>` : ''}
+                    </div>
+                    <div class="product-rating">
+                        <span class="stars">${generateStars(product.rating)}</span>
+                        <span class="rating-text">(${product.reviews} đánh giá)</span>
+                    </div>
+                    <button class="add-to-cart" onclick="addToCart(${product.id}); event.stopPropagation();">
+                        Thêm vào giỏ hàng
+                    </button>
+                </div>
+            `;
+        }
+
+        // Tạo sao đánh giá
+        function generateStars(rating) {
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 !== 0;
+            let stars = '';
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '⭐';
+            }
+            if (hasHalfStar) {
+                stars += '⭐';
+            }
+            
+            return stars;
+        }
+
+        // Hiển thị chi tiết sản phẩm
+        function showProductDetail(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const content = `
+                <button onclick="showPage('products')" style="margin-bottom: 20px; background: #667eea; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer;">← Quay lại</button>
+                
+                <div class="product-detail">
+                    <div class="product-detail-image">
+                        <img src="${product.image}" alt="${product.name}">
+                    </div>
+                    
+                    <div class="product-detail-info">
+                        <h1>${product.name}</h1>
+                        <div class="product-detail-price">
+                            ${formatPrice(product.price)}
+                            ${product.originalPrice !== product.price ? `<span class="product-original-price" style="font-size: 1.5rem;">${formatPrice(product.originalPrice)}</span>` : ''}
+                        </div>
+                        
+                        <div class="product-rating" style="margin-bottom: 2rem;">
+                            <span class="stars" style="font-size: 1.3rem;">${generateStars(product.rating)}</span>
+                            <span style="font-size: 1.1rem; margin-left: 10px;">${product.rating}/5 (${product.reviews} đánh giá)</span>
+                        </div>
+                        
+                        <div class="product-detail-description">
+                            <h3>Mô tả sản phẩm</h3>
+                            <p>${product.description}</p>
+                        </div>
+                        
+                        <div class="quantity-selector">
+                            <label style="font-weight: 600;">Số lượng:</label>
+                            <input type="number" class="quantity-input" value="1" min="1" max="10" id="productQuantity">
+                        </div>
+                        
+                        <button class="add-to-cart" style="font-size: 1.3rem; padding: 18px; margin-bottom: 15px;" onclick="addToCartWithQuantity(${product.id})">
+                            Thêm vào giỏ hàng
+                        </button>
+                        
+                        <button class="cta-btn" style="width: 100%; margin-top: 10px;" onclick="buyNow(${product.id})">
+                            Mua ngay
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('productDetailContent').innerHTML = content;
+            showPage('productDetail');
+        }
+
+        // Format giá tiền
+        function formatPrice(price) {
+            return price.toLocaleString('vi-VN') + '₫';
+        }
+
+        // Thêm sản phẩm vào giỏ hàng
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartCount();
+            showNotification(`Đã thêm ${product.name} vào giỏ hàng!`);
+        }
+
+        // Thêm sản phẩm vào giỏ hàng với số lượng
+        function addToCartWithQuantity(productId) {
+            const product = products.find(p => p.id === productId);
+            const quantity = parseInt(document.getElementById('productQuantity').value);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += quantity;
+            } else {
+                cart.push({ ...product, quantity: quantity });
+            }
+
+            updateCartCount();
+            showNotification(`Đã thêm ${quantity} ${product.name} vào giỏ hàng!`);
+        }
+
+        // Mua ngay
+        function buyNow(productId) {
+            addToCartWithQuantity(productId);
+            setTimeout(() => {
+                openCart();
+            }, 500);
+        }
+
+        // Cập nhật số lượng giỏ hàng
+        function updateCartCount() {
+            const cartCount = document.getElementById('cartCount');
+            const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+
+        // Mở giỏ hàng
+        function openCart() {
+            const modal = document.getElementById('cartModal');
+            const cartItems = document.getElementById('cartItems');
+            const cartTotal = document.getElementById('cartTotal');
+
+            cartItems.innerHTML = '';
+            let total = 0;
+
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p style="text-align: center; color: #999; padding: 40px;">Giỏ hàng trống</p>';
+            } else {
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    
+                    cartItems.innerHTML += `
+                        <div class="cart-item">
+                            <div class="cart-item-info">
+                                <h4>${item.name}</h4>
+                                <p style="color: #666;">Giá: ${formatPrice(item.price)}</p>
+                            </div>
+                            <div class="cart-item-controls">
+                                <button class="quantity-btn remove" onclick="updateQuantity(${item.id}, -1)">-</button>
+                                <span style="margin: 0 10px; font-weight: bold;">${item.quantity}</span>
+                                <button class="quantity-btn" onclick="updateQuantity(${item.id}, 1)">+</button>
+                                <span style="margin-left: 20px; font-weight: bold; color: #4CAF50;">${formatPrice(itemTotal)}</span>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+
+            cartTotal.textContent = `Tổng: ${formatPrice(total)}`;
+            modal.style.display = 'block';
+        }
+
+        // Đóng giỏ hàng
+        function closeCart() {
+            document.getElementById('cartModal').style.display = 'none';
+        }
+
+        // Cập nhật số lượng sản phẩm
+        function updateQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            if (item) {
+                item.quantity += change;
+                if (item.quantity <= 0) {
+                    cart = cart.filter(cartItem => cartItem.id !== productId);
+                }
+            }
+            updateCartCount();
+            openCart(); // Refresh cart display
+        }
+
+        // Thanh toán
+        function checkout() {
+            if (cart.length === 0) {
+                showNotification('Giỏ hàng trống!', 'error');
+                return;
+            }
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            showNotification(`Thanh toán thành công! Tổng tiền: ${formatPrice(total)}`, 'success');
+            cart = [];
+            updateCartCount();
+            closeCart();
+        }
+
+        // Hiển thị thông báo
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.background = type === 'error' ? 
+                'linear-gradient(45deg, #ff4757, #ff3742)' : 
+                'linear-gradient(45deg, #4CAF50, #45a049)';
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Tìm kiếm sản phẩm
+        function searchProducts() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            if (!searchTerm) {
+                displayProducts(products);
+                return;
+            }
+
+            const filtered = products.filter(product => 
+                product.name.toLowerCase().includes(searchTerm) ||
+                product.description.toLowerCase().includes(searchTerm) ||
+                product.category.toLowerCase().includes(searchTerm)
+            );
+            
+            filteredProducts = filtered;
+            displayProducts(filtered);
+            
+            if (currentPage !== 'products') {
+                showPage('products');
+            }
+            
+            if (filtered.length === 0) {
+                document.getElementById('productGrid').innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px;">
+                        <h3 style="color: #666; margin-bottom: 1rem;">Không tìm thấy sản phẩm nào</h3>
+                        <p style="color: #999;">Thử tìm kiếm với từ khóa khác</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Xử lý Enter trong ô tìm kiếm
+        function handleSearchEnter(event) {
+            if (event.key === 'Enter') {
+                searchProducts();
+            }
+        }
+
+        // Lọc theo danh mục
+        function filterByCategory(category) {
+            document.getElementById('categoryFilter').value = category;
+            filterProducts();
+        }
+
+        // Lọc sản phẩm
+        function filterProducts() {
+            const category = document.getElementById('categoryFilter').value;
+            const rating = parseFloat(document.getElementById('ratingFilter').value);
+            const maxPrice = parseInt(document.getElementById('priceRange').value);
+            
+            let filtered = [...products];
+            
+            // Lọc theo danh mục
+            if (category !== 'all') {
+                filtered = filtered.filter(product => product.category === category);
+            }
+            
+            // Lọc theo đánh giá
+            if (rating > 0) {
+                filtered = filtered.filter(product => product.rating >= rating);
+            }
+            
+            // Lọc theo giá
+            filtered = filtered.filter(product => product.price <= maxPrice);
+            
+            filteredProducts = filtered;
+            sortProducts();
+        }
+
+        // Lọc theo giá
+        function filterByPrice() {
+            const maxPrice = parseInt(document.getElementById('priceRange').value);
+            document.getElementById('priceDisplay').textContent = formatPrice(maxPrice);
+            filterProducts();
+        }
+
+        // Sắp xếp sản phẩm
+        function sortProducts() {
+            const sortValue = document.getElementById('sortSelect').value;
+            let sorted = [...filteredProducts];
+
+            switch(sortValue) {
+                case 'price-low':
+                    sorted.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    sorted.sort((a, b) => b.price - a.price);
+                    break;
+                case 'rating':
+                    sorted.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'name':
+                    sorted.sort((a, b) => a.name.localeCompare(b.name, 'vi'));
+                    break;
+                default:
+                    // Giữ nguyên thứ tự mặc định
+                    break;
+            }
+            
+            displayProducts(sorted);
+        }
+
+        // Đăng nhập (demo)
+        function toggleLogin() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            
+            if (isLoggedIn) {
+                // Đăng xuất
+                localStorage.removeItem('isLoggedIn');
+                localStorage.removeItem('userName');
+                document.querySelector('.user-btn').innerHTML = '👤 Đăng nhập';
+                showNotification('Đã đăng xuất thành công!');
+            } else {
+                // Đăng nhập (demo)
+                const userName = prompt('Nhập tên của bạn:');
+                if (userName && userName.trim()) {
+                    localStorage.setItem('isLoggedIn', 'true');
+                    localStorage.setItem('userName', userName.trim());
+                    document.querySelector('.user-btn').innerHTML = `👤 ${userName.trim()}`;
+                    showNotification(`Chào mừng ${userName.trim()}!`);
+                }
+            }
+        }
+
+        // Gửi form liên hệ
+        function submitContactForm(event) {
+            event.preventDefault();
+            
+            // Hiệu ứng loading
+            const submitBtn = event.target.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.innerHTML = '<div class="loading"></div> Đang gửi...';
+            submitBtn.disabled = true;
+            
+            // Giả lập gửi form
+            setTimeout(() => {
+                showNotification('Cảm ơn bạn đã liên hệ! Chúng tôi sẽ phản hồi trong 24 giờ.');
+                event.target.reset();
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }, 2000);
+        }
+
+        // Cuộn đến phần sản phẩm
+        function scrollToProducts() {
+            showPage('products');
+        }
+
+        // Xử lý click outside modal
+        window.onclick = function(event) {
+            const modal = document.getElementById('cartModal');
+            if (event.target === modal) {
+                closeCart();
+            }
+        }
+
+        // Xử lý phím ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeCart();
+            }
+        });
+
+        // Lazy loading cho hình ảnh
+        function lazyLoadImages() {
+            const images = document.querySelectorAll('img[data-src]');
+            const imageObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const img = entry.target;
+                        img.src = img.dataset.src;
+                        img.removeAttribute('data-src');
+                        imageObserver.unobserve(img);
+                    }
+                });
+            });
+
+            images.forEach(img => imageObserver.observe(img));
+        }
+
+        // Kiểm tra trạng thái đăng nhập khi tải trang
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+            const userName = localStorage.getItem('userName');
+            
+            if (isLoggedIn && userName) {
+                document.querySelector('.user-btn').innerHTML = `👤 ${userName}`;
+            }
+        }
+
+        // Animation khi cuộn
+        function handleScrollAnimation() {
+            const elements = document.querySelectorAll('.product-card, .about-content, .contact-form');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            elements.forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        }
+
+        // Tối ưu hiệu năng tìm kiếm
+        let searchTimeout;
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(() => {
+                if (e.target.value.length > 2 || e.target.value.length === 0) {
+                    searchProducts();
+                }
+            }, 300);
+        });
+
+        // Thêm hiệu ứng loading cho các button
+        function addLoadingEffect(button, originalText, duration = 2000) {
+            button.innerHTML = '<div class="loading"></div> Đang xử lý...';
+            button.disabled = true;
+            
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.disabled = false;
+            }, duration);
+        }
+
+        // Xử lý lỗi hình ảnh
+        function handleImageError(img) {
+            img.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="%23f0f0f0"><rect width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="%23999" font-size="16">Không thể tải hình</text></svg>';
+        }
+
+        // Thêm sự kiện cho tất cả hình ảnh
+        function setupImageErrorHandling() {
+            document.addEventListener('error', function(e) {
+                if (e.target.tagName === 'IMG') {
+                    handleImageError(e.target);
+                }
+            }, true);
+        }
+
+        // Khởi tạo ứng dụng
+        document.addEventListener('DOMContentLoaded', function() {
+            init();
+            checkLoginStatus();
+            setupImageErrorHandling();
+            
+            // Khởi tạo animations sau khi DOM loaded
+            setTimeout(() => {
+                handleScrollAnimation();
+                lazyLoadImages();
+            }, 100);
+        });
+
+        // Service Worker cho caching (tùy chọn)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                // Có thể thêm service worker để cache tài nguyên
+                console.log('Service Worker supported');
+            });
+        }
+
+        // Analytics tracking (demo)
+        function trackEvent(eventName, data = {}) {
+            console.log('Event:', eventName, data);
+            // Có thể tích hợp Google Analytics hoặc các công cụ tracking khác
+        }
+
+        // Theo dõi các sự kiện quan trọng
+        function setupEventTracking() {
+            // Theo dõi click vào sản phẩm
+            document.addEventListener('click', function(e) {
+                if (e.target.closest('.product-card')) {
+                    const productCard = e.target.closest('.product-card');
+                    const productName = productCard.querySelector('.product-title').textContent;
+                    trackEvent('product_view', { product_name: productName });
+                }
+                
+                // Theo dõi thêm vào giỏ hàng
+                if (e.target.classList.contains('add-to-cart')) {
+                    trackEvent('add_to_cart');
+                }
+            });
+        }
+
+        // Khởi tạo event tracking
+        setupEventTracking();
+
+        // Tự động cập nhật năm trong footer
+        function updateCopyrightYear() {
+            const currentYear = new Date().getFullYear();
+            const copyrightElements = document.querySelectorAll('.footer-bottom p');
+            copyrightElements.forEach(el => {
+                if (el.textContent.includes('2025')) {
+                    el.textContent = el.textContent.replace('2025', currentYear.toString());
+                }
+            });
+        }
+
+        updateCopyrightYear();
+    </script>
+</body>
+</html>

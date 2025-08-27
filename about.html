@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giới thiệu - TechShop</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="location.href='index.html'">🛒 TechShop</div>
+                
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." onkeypress="handleSearchEnter(event)">
+                    <button class="search-btn" onclick="searchProducts()">🔍</button>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="user-btn" onclick="showLoginModal()">👤 Đăng nhập</button>
+                    <button class="cart-btn" onclick="location.href='cart.html'">
+                        🛒 Giỏ hàng
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <ul class="nav-links">
+                <li><a href="index.html">Trang chủ</a></li>
+                <li><a href="products.html">Sản phẩm</a></li>
+                <li><a href="about.html" class="active">Giới thiệu</a></li>
+                <li><a href="contact.html">Liên hệ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- About Page Content -->
+    <div id="about" class="page active">
+        <div class="container">
+            <div class="about-content">
+                <h1 class="section-title">Về TechShop</h1>
+                
+                <h2>Câu chuyện của chúng tôi</h2>
+                <p>TechShop được thành lập vào năm 2020 với sứ mệnh mang đến những sản phẩm công nghệ chất lượng cao với giá cả phải chăng cho người tiêu dùng Việt Nam. Chúng tôi hiểu rằng công nghệ không chỉ là những thiết bị, mà còn là cầu nối giúp con người kết nối và phát triển.</p>
+
+                <h2>Tầm nhìn</h2>
+                <p>Trở thành cửa hàng công nghệ trực tuyến hàng đầu tại Việt Nam, nơi khách hàng có thể tìm thấy mọi sản phẩm công nghệ họ cần với chất lượng dịch vụ xuất sắc.</p>
+
+                <h2>Giá trị cốt lõi</h2>
+                <p><strong>Chất lượng:</strong> Chúng tôi chỉ bán những sản phẩm chính hãng, được kiểm tra kỹ lưỡng.</p>
+                <p><strong>Uy tín:</strong> Minh bạch trong giá cả, chính sách bảo hành rõ ràng.</p>
+                <p><strong>Dịch vụ:</strong> Hỗ trợ khách hàng 24/7, giao hàng nhanh chóng.</p>
+                <p><strong>Đổi mới:</strong> Luôn cập nhật những xu hướng công nghệ mới nhất.</p>
+
+                <h2>Đội ngũ</h2>
+                <p>Đội ngũ TechShop gồm những chuyên gia am hiểu sâu sắc về công nghệ, luôn sẵn sàng tư vấn và hỗ trợ khách hàng tìm được sản phẩm phù hợp nhất.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login/Register Modal -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeLoginModal()">&times;</span>
+        
+        <!-- Form Đăng nhập -->
+        <div id="login" class="tab-content active">
+            <h2>Đăng nhập</h2>
+            <form id="loginForm" onsubmit="submitLogin(event)">
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="loginEmail" name="email" autocomplete="username" required placeholder="Nhập email">
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu *</label>
+                    <input type="password" id="loginPassword" name="password" autocomplete="current-password" required placeholder="Nhập mật khẩu">
+                </div>
+                <button type="submit" class="submit-btn1">Đăng nhập</button>
+                <p style="margin-top: 15px; text-align: center;">
+                    Bạn chưa có tài khoản? <a href="#" onclick="showTab('register')">Đăng ký ngay</a>
+                </p>
+            </form>
+        </div>
+        
+        <!-- Form Đăng ký -->
+        <div id="register" class="tab-content">
+            <h2>Đăng ký</h2>
+            <form id="registerForm" onsubmit="submitRegister(event)">
+                <div class="form-group">
+                    <label>Họ và tên *</label>
+                    <input type="text" id="registerName" required placeholder="Nhập họ và tên">
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="registerEmail"  name="email" autocomplete="username" required placeholder="Nhập email">
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu *</label>
+                    <input type="password" id="registerPassword" required placeholder="Nhập mật khẩu">
+                </div>
+                <div class="form-group">
+                    <label>Xác nhận mật khẩu *</label>
+                    <input type="password" id="confirmPassword" required placeholder="Xác nhận mật khẩu">
+                </div>
+                <button type="submit" class="submit-btn2">Đăng ký</button>
+                <p style="margin-top: 15px; text-align: center;">
+                    Bạn đã có tài khoản? <a href="#" onclick="showTab('login')">Đăng nhập ngay</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TechShop</h3>
+                    <p>Cửa hàng công nghệ trực tuyến hàng đầu Việt Nam. Chúng tôi cam kết mang đến những sản phẩm chất lượng cao với dịch vụ tốt nhất.</p>
+                    <p style="margin-top: 15px;">
+                        🏆 Top 1 cửa hàng công nghệ uy tín<br>
+                        ⚡ Giao hàng nhanh toàn quốc<br>
+                        🔒 Thanh toán an toàn 100%
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Sản phẩm</h3>
+                    <ul>
+                        <li><a href="products.html" onclick="filterByCategory('phone')">Điện thoại</a></li>
+                        <li><a href="products.html" onclick="filterByCategory('laptop')">Laptop</a></li>
+                        <li><a href="products.html" onclick="filterByCategory('tablet')">Tablet</a></li>
+                        <li><a href="products.html" onclick="filterByCategory('accessories')">Phụ kiện</a></li>
+                        <li><a href="#">Sản phẩm mới</a></li>
+                        <li><a href="#">Sản phẩm khuyến mãi</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Hỗ trợ khách hàng</h3>
+                    <ul>
+                        <li><a href="contact.html">Liên hệ hỗ trợ</a></li>
+                        <li><a href="#">Hướng dẫn mua hàng</a></li>
+                        <li><a href="#">Chính sách bảo hành</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Phương thức thanh toán</a></li>
+                        <li><a href="#">Chính sách vận chuyển</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Thông tin công ty</h3>
+                    <ul>
+                        <li><a href="about.html">Về TechShop</a></li>
+                        <li><a href="#">Tin tức công nghệ</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 TechShop Vietnam. Tất cả quyền được bảo lưu.</p>
+                <p style="margin-top: 5px;">
+                    Giấy phép ĐKKD số: 0123456789 | 
+                    MST: 0987654321 | 
+                    Hotline: 1900 1234
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

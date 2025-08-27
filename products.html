@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sản phẩm - TechShop</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo" onclick="location.href='index.html'">🛒 TechShop</div>
+                
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Tìm kiếm sản phẩm..." onkeypress="handleSearchEnter(event)">
+                    <button class="search-btn" onclick="searchProducts()">🔍</button>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="user-btn" onclick="showLoginModal()">👤 Đăng nhập</button>
+                    <button class="cart-btn" onclick="location.href='cart.html'">
+                        🛒 Giỏ hàng
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <ul class="nav-links">
+                <li><a href="index.html">Trang chủ</a></li>
+                <li><a href="products.html" class="active">Sản phẩm</a></li>
+                <li><a href="about.html">Giới thiệu</a></li>
+                <li><a href="contact.html">Liên hệ</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Products Page Content -->
+    <div id="products" class="page active">
+        <div class="container">
+            <h1 class="section-title">Tất cả sản phẩm</h1>
+            
+            <!-- Filters -->
+            <section class="filters">
+                <div class="filter-row">
+                    <div class="filter-group">
+                        <label>Danh mục:</label>
+                        <select id="categoryFilter" onchange="filterProducts()">
+                            <option value="all">Tất cả</option>
+                            <option value="phone">Điện thoại</option>
+                            <option value="laptop">Laptop</option>
+                            <option value="tablet">Tablet</option>
+                            <option value="accessories">Phụ kiện</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Sắp xếp theo:</label>
+                        <select id="sortSelect" onchange="sortProducts()">
+                            <option value="default">Mặc định</option>
+                            <option value="price-low">Giá thấp → cao</option>
+                            <option value="price-high">Giá cao → thấp</option>
+                            <option value="rating">Đánh giá cao nhất</option>
+                            <option value="name">Tên A-Z</option>
+                        </select>
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Khoảng giá: <span id="priceDisplay">50,000,000₫</span></label>
+                        <input type="range" id="priceRange" min="0" max="50000000" value="50000000" oninput="filterByPrice()">
+                    </div>
+                    
+                    <div class="filter-group">
+                        <label>Đánh giá tối thiểu:</label>
+                        <select id="ratingFilter" onchange="filterProducts()">
+                            <option value="0">Tất cả</option>
+                            <option value="4">4⭐ trở lên</option>
+                            <option value="3">3⭐ trở lên</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Products Grid -->
+            <section>
+                <div class="product-grid" id="productGrid">
+                    <!-- Sản phẩm sẽ được tạo bởi JavaScript -->
+                </div>
+            </section>
+        </div>
+    </div>
+
+    <!-- Login/Register Modal -->
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeLoginModal()">&times;</span>
+        
+        <!-- Form Đăng nhập -->
+        <div id="login" class="tab-content active">
+            <h2>Đăng nhập</h2>
+            <form id="loginForm" onsubmit="submitLogin(event)">
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="loginEmail"  name="email" autocomplete="username" required placeholder="Nhập email">
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu *</label>
+                    <input type="password" id="loginPassword" name="password" autocomplete="current-password" required placeholder="Nhập mật khẩu">
+                </div>
+                <button type="submit" class="submit-btn1">Đăng nhập</button>
+                <p style="margin-top: 15px; text-align: center;">
+                    Bạn chưa có tài khoản? <a href="#" onclick="showTab('register')">Đăng ký ngay</a>
+                </p>
+            </form>
+        </div>
+        
+        <!-- Form Đăng ký -->
+        <div id="register" class="tab-content">
+            <h2>Đăng ký</h2>
+            <form id="registerForm" onsubmit="submitRegister(event)">
+                <div class="form-group">
+                    <label>Họ và tên *</label>
+                    <input type="text" id="registerName" required placeholder="Nhập họ và tên">
+                </div>
+                <div class="form-group">
+                    <label>Email *</label>
+                    <input type="email" id="registerEmail"  name="email" autocomplete="username" required placeholder="Nhập email">
+                </div>
+                <div class="form-group">
+                    <label>Mật khẩu *</label>
+                    <input type="password" id="registerPassword" required placeholder="Nhập mật khẩu">
+                </div>
+                <div class="form-group">
+                    <label>Xác nhận mật khẩu *</label>
+                    <input type="password" id="confirmPassword" required placeholder="Xác nhận mật khẩu">
+                </div>
+                <button type="submit" class="submit-btn2">Đăng ký</button>
+                <p style="margin-top: 15px; text-align: center;">
+                    Bạn đã có tài khoản? <a href="#" onclick="showTab('login')">Đăng nhập ngay</a>
+                </p>
+            </form>
+        </div>
+    </div>
+</div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>TechShop</h3>
+                    <p>Cửa hàng công nghệ trực tuyến hàng đầu Việt Nam. Chúng tôi cam kết mang đến những sản phẩm chất lượng cao với dịch vụ tốt nhất.</p>
+                    <p style="margin-top: 15px;">
+                        🏆 Top 1 cửa hàng công nghệ uy tín<br>
+                        ⚡ Giao hàng nhanh toàn quốc<br>
+                        🔒 Thanh toán an toàn 100%
+                    </p>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Sản phẩm</h3>
+                    <ul>
+                        <li><a href="products.html" onclick="filterByCategory('phone')">Điện thoại</a></li>
+                        <li><a href="products.html" onclick="filterByCategory('laptop')">Laptop</a></li>
+                        <li><a href="products.html" onclick="filterByCategory('tablet')">Tablet</a></li>
+                        <li><a href="products.html" onclick="filterByCategory('accessories')">Phụ kiện</a></li>
+                        <li><a href="#">Sản phẩm mới</a></li>
+                        <li><a href="#">Sản phẩm khuyến mãi</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Hỗ trợ khách hàng</h3>
+                    <ul>
+                        <li><a href="contact.html">Liên hệ hỗ trợ</a></li>
+                        <li><a href="#">Hướng dẫn mua hàng</a></li>
+                        <li><a href="#">Chính sách bảo hành</a></li>
+                        <li><a href="#">Chính sách đổi trả</a></li>
+                        <li><a href="#">Phương thức thanh toán</a></li>
+                        <li><a href="#">Chính sách vận chuyển</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Thông tin công ty</h3>
+                    <ul>
+                        <li><a href="about.html">Về TechShop</a></li>
+                        <li><a href="#">Tin tức công nghệ</a></li>
+                        <li><a href="#">Tuyển dụng</a></li>
+                        <li><a href="#">Chính sách bảo mật</a></li>
+                        <li><a href="#">Điều khoản sử dụng</a></li>
+                        <li><a href="#">Sitemap</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 TechShop Vietnam. Tất cả quyền được bảo lưu.</p>
+                <p style="margin-top: 5px;">
+                    Giấy phép ĐKKD số: 0123456789 | 
+                    MST: 0987654321 | 
+                    Hotline: 1900 1234
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Notification -->
+    <div id="notification" class="notification"></div>
+
+    <script src="js/script.js"></script>
+</body>
+</html>
